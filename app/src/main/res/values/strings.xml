@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Kubit</string>
+    <string name="title_activity_intro">IntroActivity</string>
+    <string name="title_activity_main">MainActivity</string>
 </resources>
