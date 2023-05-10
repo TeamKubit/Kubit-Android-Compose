@@ -1,4 +1,4 @@
-package com.kubit.android.ui.screen.investment
+package com.kubit.android.ui.screen.main
 
 import androidx.compose.runtime.Composable
 

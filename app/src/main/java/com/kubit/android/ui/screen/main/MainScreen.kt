@@ -1,9 +1,12 @@
-package com.kubit.android.ui.component.navigation
+package com.kubit.android.ui.screen.main
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Icon
+import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -13,39 +16,48 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
+import com.kubit.android.KubitViewModel
 import com.kubit.android.data.model.navigation.BottomNavItem
-import com.kubit.android.ui.screen.coinlist.CoinListScreen
-import com.kubit.android.ui.screen.exchange.ExchangeScreen
-import com.kubit.android.ui.screen.investment.InvestmentScreen
-import com.kubit.android.ui.screen.profile.ProfileScreen
 import com.kubit.android.ui.theme.PrimaryLight
 import com.kubit.android.ui.util.ConvertUtil
 
 @Composable
-fun NavigationGraph(navController: NavHostController) {
-    NavHost(
-        navController = navController,
-        startDestination = BottomNavItem.CoinListTab.screenRoute
+fun MainScreen(
+    kubitViewModel: KubitViewModel,
+    appNavController: NavController
+) {
+    val navController = rememberNavController()
+
+    Scaffold(
+        bottomBar = { BottomNavigation(navController = navController) }
     ) {
-        composable(BottomNavItem.CoinListTab.screenRoute) {
-            CoinListScreen()
-        }
-        composable(BottomNavItem.InvestmentTab.screenRoute) {
-            InvestmentScreen()
-        }
-        composable(BottomNavItem.ExchangeTab.screenRoute) {
-            ExchangeScreen()
-        }
-        composable(BottomNavItem.ProfileTab.screenRoute) {
-            ProfileScreen()
+        Box(Modifier.padding(it)) {
+            NavHost(
+                navController = navController,
+                startDestination = BottomNavItem.CoinListTab.screenRoute
+            ) {
+                composable(BottomNavItem.CoinListTab.screenRoute) {
+                    CoinListScreen()
+                }
+                composable(BottomNavItem.InvestmentTab.screenRoute) {
+                    InvestmentScreen()
+                }
+                composable(BottomNavItem.ExchangeTab.screenRoute) {
+                    ExchangeScreen()
+                }
+                composable(BottomNavItem.ProfileTab.screenRoute) {
+                    ProfileScreen()
+                }
+            }
         }
     }
 }
-
 
 @Composable
 fun BottomNavigation(navController: NavHostController) {
