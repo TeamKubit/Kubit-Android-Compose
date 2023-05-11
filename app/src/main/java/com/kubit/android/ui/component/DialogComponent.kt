@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.ContentAlpha
 import androidx.compose.material.LocalContentAlpha
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.ProvideTextStyle
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
@@ -46,8 +45,8 @@ fun KubitMessagDialog(
     text: @Composable (() -> Unit)? = null,
     confirmButton: @Composable () -> Unit,
     dismissButton: @Composable (() -> Unit)? = null,
-    shape: Shape = MaterialTheme.shapes.medium,
-    backgroundColor: Color = MaterialTheme.colors.surface,
+    shape: Shape = Shapes.large,
+    backgroundColor: Color = Color.White,
     contentColor: Color = contentColorFor(backgroundColor),
 ) {
     KubitTheme {
@@ -130,6 +129,9 @@ fun MessageDialog(
     KubitTheme {
         KubitMessagDialog(
             onDismissRequest = { onDismissRequest() },
+            modifier = Modifier
+                .width(334.dp)
+                .background(color = Color.White, shape = Shapes.large),
             title = {
                 Text(
                     text = title,
@@ -161,10 +163,7 @@ fun MessageDialog(
                             .background(color = DialogBlue, shape = Shapes.small)
                     )
                 }
-            },
-            modifier = Modifier
-                .width(334.dp)
-                .background(color = Color.White, shape = Shapes.large)
+            }
         )
     }
 }
@@ -186,6 +185,9 @@ fun MessageDialog(
     KubitTheme {
         KubitMessagDialog(
             onDismissRequest = { onDismissRequest() },
+            modifier = Modifier
+                .width(334.dp)
+                .background(color = Color.White, shape = Shapes.large),
             text = {
                 Text(
                     text = message,
@@ -210,10 +212,7 @@ fun MessageDialog(
                             .background(color = DialogBlue, shape = Shapes.small)
                     )
                 }
-            },
-            modifier = Modifier
-                .width(334.dp)
-                .background(color = Color.White, shape = Shapes.large)
+            }
         )
     }
 }

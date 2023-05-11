@@ -5,6 +5,7 @@ import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.kubit.android.data.util.NetworkUtil
 import com.kubit.android.ui.screen.KubitApp
 
 class MainActivity : ComponentActivity() {
@@ -20,7 +21,9 @@ class MainActivity : ComponentActivity() {
                     )
                 ).apply {
                     requestMarketCode()
-                }
+                },
+                networkEnable = NetworkUtil.checkNetworkEnable(this),
+                activityFinish = { finish() }
             )
         }
     }

@@ -23,6 +23,10 @@ object NetworkUtil {
                         networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)
                     val isEthernetConnected =
                         networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)
+                    DLog.d(
+                        TAG,
+                        "isCellularConnected=$isCellularConnected, isWiFiConnected=$isWiFiConnected, isEthernetConnected=$isEthernetConnected"
+                    )
 
                     isCellularConnected || isWiFiConnected || isEthernetConnected
                 } ?: false
@@ -32,5 +36,7 @@ object NetworkUtil {
             networkInfo != null && networkInfo.isConnected
         }
     }
-    
+
+    private const val TAG: String = "NetworkUtil"
+
 }
