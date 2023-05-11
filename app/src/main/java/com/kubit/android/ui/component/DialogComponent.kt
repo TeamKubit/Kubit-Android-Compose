@@ -38,7 +38,7 @@ import com.kubit.android.ui.theme.TextLight
 import com.kubit.android.ui.util.ConvertUtil
 
 @Composable
-fun KubitMessagDialog(
+fun KubitMessageDialog(
     onDismissRequest: () -> Unit,
     modifier: Modifier = Modifier,
     title: @Composable (() -> Unit)? = null,
@@ -127,7 +127,7 @@ fun MessageDialog(
     isDarkTheme: Boolean = isSystemInDarkTheme()
 ) {
     KubitTheme {
-        KubitMessagDialog(
+        KubitMessageDialog(
             onDismissRequest = { onDismissRequest() },
             modifier = Modifier
                 .width(334.dp)
@@ -183,7 +183,7 @@ fun MessageDialog(
     isDarkTheme: Boolean = isSystemInDarkTheme()
 ) {
     KubitTheme {
-        KubitMessagDialog(
+        KubitMessageDialog(
             onDismissRequest = { onDismissRequest() },
             modifier = Modifier
                 .width(334.dp)
