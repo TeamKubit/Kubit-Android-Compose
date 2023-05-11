@@ -219,7 +219,7 @@ fun MessageDialog(
 
 @Composable
 @Preview
-fun UiComponentPreview() {
+fun DialogComponentPreview() {
     MessageDialog(title = "타이틀", message = "와이파이에 연결해 주삼~~", onDismissRequest = { })
 //    MessageDialog(message = "와이파이에 연결해 주삼~~", onDismissRequest = { })
 }
