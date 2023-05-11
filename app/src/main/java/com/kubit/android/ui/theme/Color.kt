@@ -2,6 +2,8 @@ package com.kubit.android.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
+val DialogBlue = Color(0xFF1A6CBD)
+
 val PrimaryLight = Color(0xFF1C4528)
 val PrimaryDark = Color(0xFF0D0D03)
 
