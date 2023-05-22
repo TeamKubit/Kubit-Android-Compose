@@ -1,8 +1,12 @@
 package com.kubit.android.data.repository
 
 import android.app.Application
+import com.kubit.android.data.model.coin.CoinSnapshotData
+import com.kubit.android.data.model.coin.KubitCoinInfoData
 import com.kubit.android.data.model.market.KubitMarketData
 import com.kubit.android.data.model.network.NetworkResult
+import com.kubit.android.data.repository.thread.KubitTickerThread
+import com.kubit.android.data.util.DLog
 import com.kubit.android.data.util.JsonParserUtil
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -14,6 +18,8 @@ class KubitRepository(
 ) : BaseNetworkRepository(application = application, TAG = TAG) {
 
     private val jsonParserUtil: JsonParserUtil = JsonParserUtil()
+
+    private var kubitTickerThread: KubitTickerThread? = null
 
     suspend fun makeMarketCodeRequest(): NetworkResult<KubitMarketData> {
         return withContext(Dispatchers.IO) {
@@ -42,6 +48,23 @@ class KubitRepository(
 
             result
         }
+    }
+
+    fun makeCoinTickerThread(
+        pCoinInfoDataList: List<KubitCoinInfoData>,
+        onSuccessListener: (snapshotDataList: List<CoinSnapshotData>) -> Unit,
+        onFailListener: (failMsg: String) -> Unit,
+        onErrorListener: (e: Exception) -> Unit
+    ) {
+        DLog.d(TAG, "makeCoinTickerThread() is called, pCoinInfoDataList=$pCoinInfoDataList")
+        kubitTickerThread =
+            KubitTickerThread(pCoinInfoDataList, onSuccessListener, onFailListener, onErrorListener)
+        kubitTickerThread?.start()
+    }
+
+    fun stopCoinTickerThread() {
+        kubitTickerThread?.kill()
+        kubitTickerThread = null
     }
 
     companion object {

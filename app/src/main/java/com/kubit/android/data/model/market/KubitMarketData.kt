@@ -30,38 +30,22 @@ class KubitMarketData(
     }
 
     /**
-     * 마켓 코드 파라미터를 반환하는 함수
+     * 임의의 마켓에서 거래 가능한 코인 리스트를 반환하는 함수
      *
      * @param pMarketCode   마켓 코드
      *
-     * @see KubitMarketCode
+     * @return pMarketCode 마켓에서 거래 가능한 코인 리스트
      */
-    fun getMarketCode(pMarketCode: String): String {
-        val sb = StringBuilder("")
-        when (pMarketCode) {
+    fun getKubitCoinInfoDataList(pMarketCode: KubitMarketCode): List<KubitCoinInfoData> {
+        return when (pMarketCode) {
             KubitMarketCode.KRW -> {
-                val krwMarketList = kubitCoinMap[pMarketCode]
-                if (krwMarketList != null) {
-                    for (krwMarket in krwMarketList) {
-                        if (sb.isNotEmpty()) sb.append(", ")
-                        sb.append(krwMarket.market)
-                    }
-                }
+                kubitCoinMap["KRW"] ?: listOf()
             }
+
             KubitMarketCode.BTC -> {
-                val btcMarketList = kubitCoinMap[pMarketCode]
-                if (btcMarketList != null) {
-                    for (btcMarket in btcMarketList) {
-                        if (sb.isNotEmpty()) sb.append(", ")
-                        sb.append(btcMarket.market)
-                    }
-                }
-            }
-            else -> {
-                throw UnsupportedOperationException("MarketCode $pMarketCode is not supported.\nPlease retry with other marketCode.")
+                kubitCoinMap["BTC"] ?: listOf()
             }
         }
-        return sb.toString()
     }
 
     override fun toString(): String {

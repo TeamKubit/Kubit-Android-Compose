@@ -9,10 +9,13 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.kubit.android.KubitViewModel
 import com.kubit.android.R
+import com.kubit.android.data.util.DLog
 import com.kubit.android.ui.component.MessageDialog
 import com.kubit.android.ui.screen.intro.IntroScreen
 import com.kubit.android.ui.screen.main.MainScreen
 import com.kubit.android.ui.theme.KubitTheme
+
+const val TAG: String = "KubitScreen"
 
 enum class KubitScreen {
     Intro,
@@ -28,6 +31,30 @@ fun KubitApp(
     networkEnable: Boolean = false,
     activityFinish: () -> Unit = {}
 ) {
+    navController.addOnDestinationChangedListener { controller, destination, arguments ->
+        when (destination.route) {
+            KubitScreen.Intro.name -> {
+                kubitViewModel.stopTickerData()
+            }
+
+            KubitScreen.Main.name -> {
+                kubitViewModel.requestTickerData()
+            }
+
+            KubitScreen.Transaction.name -> {
+                kubitViewModel.stopTickerData()
+            }
+
+            KubitScreen.Login.name -> {
+                kubitViewModel.stopTickerData()
+            }
+
+            else -> {
+                DLog.e(TAG, "Unrecognized destination=$destination")
+            }
+        }
+    }
+
     KubitTheme {
         NavHost(
             navController = navController,

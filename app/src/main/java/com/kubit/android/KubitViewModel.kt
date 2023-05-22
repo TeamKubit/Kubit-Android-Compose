@@ -4,6 +4,8 @@ import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.kubit.android.data.model.coin.CoinSnapshotData
+import com.kubit.android.data.model.market.KubitMarketCode
 import com.kubit.android.data.model.market.KubitMarketData
 import com.kubit.android.data.model.network.NetworkResult
 import com.kubit.android.data.repository.KubitRepository
@@ -22,6 +24,14 @@ class KubitViewModel(
 
     private var _marketCode: KubitMarketData? = null
     private val marketCode: KubitMarketData get() = _marketCode!!
+
+    /**
+     * 코인 스냅샷 데이터 리스트
+     */
+    private val _coinSnapshotDataList: MutableStateFlow<List<CoinSnapshotData>> =
+        MutableStateFlow(listOf())
+    val coinSnapshotDataList: StateFlow<List<CoinSnapshotData>> =
+        _coinSnapshotDataList.asStateFlow()
 
     fun requestMarketCode() {
         DLog.d("${TAG}_requestMarketCode", "requestMarketCode() is called!")
@@ -42,6 +52,34 @@ class KubitViewModel(
 
                 }
             }
+        }
+    }
+
+    fun requestTickerData(
+        pMarketCode: KubitMarketCode = KubitMarketCode.KRW
+    ) {
+        DLog.d(TAG, "requestTickerData() is called!")
+        viewModelScope.launch {
+            kubitRepository.makeCoinTickerThread(
+                pCoinInfoDataList = marketCode.getKubitCoinInfoDataList(pMarketCode),
+                onSuccessListener = { snapshotDataList ->
+                    DLog.d(TAG, "snapshotDataList=$snapshotDataList")
+                    _coinSnapshotDataList.value = snapshotDataList
+                },
+                onFailListener = { failMsg ->
+                    DLog.e(TAG, failMsg)
+                },
+                onErrorListener = { e ->
+                    DLog.e(TAG, e.message, e)
+                }
+            )
+        }
+    }
+
+    fun stopTickerData() {
+        DLog.d(TAG, "stopTickerData() is called")
+        viewModelScope.launch {
+            kubitRepository.stopCoinTickerThread()
         }
     }
 

@@ -11,4 +11,6 @@
     <string name="bottom_nav_investment">투자내역</string>
     <string name="bottom_nav_exchange">입출금</string>
     <string name="bottom_nav_profile">내정보</string>
+
+    <string name="title_coinList">거래소</string>
 </resources>

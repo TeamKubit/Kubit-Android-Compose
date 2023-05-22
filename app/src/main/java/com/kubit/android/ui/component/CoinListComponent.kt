@@ -1,6 +1,7 @@
 package com.kubit.android.ui.component
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -24,6 +25,9 @@ import androidx.compose.ui.unit.ExperimentalUnitApi
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
+import com.kubit.android.data.model.coin.CoinSnapshotData
+import com.kubit.android.ui.theme.BorderDark
+import com.kubit.android.ui.theme.BorderLight
 import com.kubit.android.ui.theme.CandleDark
 import com.kubit.android.ui.theme.CandleLight
 import com.kubit.android.ui.theme.CoinBlueDark
@@ -35,11 +39,15 @@ import com.kubit.android.ui.theme.PrimaryDark
 import com.kubit.android.ui.theme.TextDark
 import com.kubit.android.ui.theme.TextGray
 import com.kubit.android.ui.theme.TextLight
+import com.kubit.android.ui.util.CommonUtil
 import com.kubit.android.ui.util.ConvertUtil
+import com.kubit.android.ui.util.bottomBorder
 
 @OptIn(ExperimentalUnitApi::class)
 @Composable
 fun CoinListItem(
+    coinSnapshotData: CoinSnapshotData,
+    onClickListener: (coinSnapshotData: CoinSnapshotData) -> Unit = {},
     isDarkTheme: Boolean = isSystemInDarkTheme()
 ) {
     KubitTheme {
@@ -47,19 +55,29 @@ fun CoinListItem(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(50.dp)
-                .background(color = if (isDarkTheme) PrimaryDark else Color.White),
+                .background(color = if (isDarkTheme) PrimaryDark else Color.White)
+                .bottomBorder(
+                    strokeWidth = 1.dp,
+                    color = if (isDarkTheme) BorderDark else BorderLight
+                )
+                .clickable(
+                    onClick = { onClickListener(coinSnapshotData) }
+                ),
             horizontalArrangement = Arrangement.End
         ) {
 
-            Spacer(modifier = Modifier.width(10.dp))
+            Spacer(modifier = Modifier.width(15.dp))
 
-            CoinChangeRateStick(isDarkTheme = isDarkTheme)
+            CoinChangeRateStick(
+                changeRate = coinSnapshotData.signedChangeRate,
+                isDarkTheme = isDarkTheme
+            )
 
             Spacer(modifier = Modifier.width(10.dp))
 
             Column(modifier = Modifier.padding(top = 7.dp)) {
                 Text(
-                    text = "비트코인",
+                    text = coinSnapshotData.nameKor,
                     fontWeight = FontWeight.Normal,
                     fontSize = ConvertUtil.dp2sp(dp = 14.dp),
                     color = if (isDarkTheme) TextDark else TextLight,
@@ -68,7 +86,7 @@ fun CoinListItem(
                     overflow = TextOverflow.Clip
                 )
                 Text(
-                    text = "BTC/KRW",
+                    text = coinSnapshotData.nameEng,
                     fontWeight = FontWeight.Normal,
                     fontSize = ConvertUtil.dp2sp(dp = 10.dp),
                     color = TextGray,
@@ -81,10 +99,10 @@ fun CoinListItem(
             Spacer(modifier = Modifier.weight(1f))
 
             Text(
-                text = "36,912,000",
+                text = ConvertUtil.tradePrice2string(coinSnapshotData.tradePrice),
                 fontWeight = FontWeight.Normal,
                 fontSize = ConvertUtil.dp2sp(dp = 12.dp),
-                color = if (isDarkTheme) TextDark else TextLight,
+                color = CommonUtil.getPriceColor(coinSnapshotData.change, isDarkTheme),
                 textAlign = TextAlign.Right,
                 letterSpacing = TextUnit(-0.05f, TextUnitType.Sp),
                 overflow = TextOverflow.Clip,
@@ -94,10 +112,10 @@ fun CoinListItem(
             )
 
             Text(
-                text = "-10.00%",
+                text = ConvertUtil.changeRate2string(coinSnapshotData.signedChangeRate),
                 fontWeight = FontWeight.Normal,
                 fontSize = ConvertUtil.dp2sp(dp = 12.dp),
-                color = if (isDarkTheme) TextDark else TextLight,
+                color = CommonUtil.getPriceColor(coinSnapshotData.change, isDarkTheme),
                 textAlign = TextAlign.Right,
                 letterSpacing = TextUnit(-0.05f, TextUnitType.Sp),
                 overflow = TextOverflow.Clip,
@@ -107,7 +125,7 @@ fun CoinListItem(
             )
 
             Text(
-                text = "146,069백만",
+                text = ConvertUtil.accTradePrice24H2string(coinSnapshotData.accTradePrice24H),
                 fontWeight = FontWeight.Normal,
                 fontSize = ConvertUtil.dp2sp(dp = 12.dp),
                 color = if (isDarkTheme) TextDark else TextLight,
@@ -116,7 +134,7 @@ fun CoinListItem(
                 overflow = TextOverflow.Clip,
                 modifier = Modifier
                     .width(100.dp)
-                    .padding(top = 7.dp, end = 10.dp)
+                    .padding(top = 7.dp, end = 15.dp)
             )
         }
     }
@@ -124,7 +142,7 @@ fun CoinListItem(
 
 @Composable
 fun CoinChangeRateStick(
-    changeRate: Float = 0.5f,
+    changeRate: Double = 0.5,
     isDarkTheme: Boolean = isSystemInDarkTheme()
 ) {
     Box(
@@ -184,5 +202,5 @@ fun CoinChangeRateStick(
 @Preview
 @Composable
 fun CoinListComponentPreview() {
-    CoinListItem()
+    CoinListItem(CoinSnapshotData.getDefaultData())
 }

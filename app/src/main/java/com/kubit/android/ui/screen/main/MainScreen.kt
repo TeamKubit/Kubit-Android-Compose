@@ -24,6 +24,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.kubit.android.KubitViewModel
 import com.kubit.android.data.model.navigation.BottomNavItem
+import com.kubit.android.ui.screen.KubitScreen
 import com.kubit.android.ui.theme.PrimaryLight
 import com.kubit.android.ui.util.ConvertUtil
 
@@ -43,7 +44,12 @@ fun MainScreen(
                 startDestination = BottomNavItem.CoinListTab.screenRoute
             ) {
                 composable(BottomNavItem.CoinListTab.screenRoute) {
-                    CoinListScreen()
+                    CoinListScreen(
+                        kubitViewModel = kubitViewModel,
+                        onCoinItemClick = { coinSnapshotData ->
+                            appNavController.navigate(route = KubitScreen.Transaction.name)
+                        }
+                    )
                 }
                 composable(BottomNavItem.InvestmentTab.screenRoute) {
                     InvestmentScreen()
